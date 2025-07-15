@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #0a0f1a;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            background: #0d1b2a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #1b263b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            color: #e0e0e0;
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: normal;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+        .nav-link {
+            color: #778da9;
+            text-decoration: none;
+            padding: 6px 12px;
+            border: 1px solid #415a77;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .nav-link:hover {
+            color: #e0e0e0;
+            background: #415a77;
+        }
+        .user-title {
+            color: #e0e0e0;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 1.2em;
+        }
+        .task {
+            background: #0d1b2a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #1b263b;
+        }
+        .task-header {
+            color: #e0e0e0;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .task-detail {
+            color: #778da9;
+            margin: 8px 0;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        .task-status {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .no-tasks {
+            background: #0d1b2a;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #1b263b;
+            color: #778da9;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .pagination a {
+            color: #778da9;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #415a77;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .pagination a:hover {
+            color: #e0e0e0;
+            background: #415a77;
+        }
+        .page-info {
+            text-align: center;
+            color: #778da9;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #1b263b;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TASK TREKER</h1>
+        <div class="nav-links">
+            <a href="{{url_for('profile')}}" class="nav-link">Профиль</a>
+            {% if source == 'profile' %}
+                <a href="{{ url_for('profile') }}" class="nav-link">← Назад</a>
+            {% else %}
+                <a href="{{ url_for('watch_tovars', page=prev_page) }}" class="nav-link">← Назад</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <h2 class="user-title">Выполненные задачи - {{username}}</h2>
+    <hr>
+
+    {% if tasks %}
+        {% for item in tasks %}
+        <div class="task">
+            <div class="task-header">
+                <span>Задача №{{ loop.index }}</span>
+                <span class="task-status">{{ item.status }}</span>
+            </div>
+            <p class="task-detail"><strong>Название:</strong> {{ item.name }}</p>
+            <p class="task-detail"><strong>Описание:</strong> {{ item.description }}</p>
+            <p class="task-detail"><strong>Дата добавления:</strong> {{ item.data }}</p>
+            <p class="task-detail"><strong>Дата выполнения:</strong> {{ item.completed_at }}</p>
+            <p class="task-detail"><strong>Последнее изменение:</strong> {{ item.updated_at }}</p>
+        </div>
+        {% endfor %}
+
+        <div class="page-info">Страница {{ page }} из {{ count }}</div>
+        
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('watch_completed_task', page=page-1, prev_page=prev_page, source=source) }}">← Назад</a>
+            {% else %}
+                <span></span>
+            {% endif %}
+            
+            {% if page < count %}
+                <a href="{{ url_for('watch_completed_task', page=page+1, prev_page=prev_page, source=source) }}">Вперед →</a>
+            {% else %}
+                <span></span>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="no-tasks">
+            <p>У вас пока нет выполненных задач!</p>
+        </div>
+    {% endif %}
+</body>
+</html>

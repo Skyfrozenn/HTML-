@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #0a0f1a;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1b263b;
+        }
+        .header h1 {
+            color: #e0e0e0;
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: normal;
+        }
+        .header a {
+            color: #778da9;
+            text-decoration: none;
+            padding: 6px 12px;
+            border: 1px solid #415a77;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .header a:hover {
+            color: #e0e0e0;
+            background: #415a77;
+        }
+        .task-card {
+            background: #0d1b2a;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #1b263b;
+        }
+        .task-title {
+            color: #e0e0e0;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+        .task-detail {
+            color: #778da9;
+            margin: 8px 0;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        .action-card {
+            background: #0d1b2a;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #1b263b;
+        }
+        .action-title {
+            color: #e0e0e0;
+            margin: 0 0 12px 0;
+            font-size: 1em;
+            font-weight: normal;
+        }
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 12px 0;
+            background: #1b263b;
+            border: 1px solid #415a77;
+            color: #e0e0e0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+        }
+        .form-button {
+            background: #415a77;
+            color: #e0e0e0;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .form-button:hover {
+            background: #778da9;
+        }
+        .complete-button {
+            background: #415a77;
+            color: #e0e0e0;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .complete-button:hover {
+            background: #778da9;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid #1b263b;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>TASK TREKER</h1>
+        <a href="{{url_for('profile')}}">Профиль</a>
+    </div>
+    
+    <div class="task-card">
+        <h2 class="task-title">Задача - {{task.name}}</h2>
+        <p class="task-detail"><strong>Название:</strong> {{task.name}}</p>
+        <p class="task-detail"><strong>Описание:</strong> {{task.description}}</p>
+        <p class="task-detail"><strong>Статус:</strong> {{task.status}}</p>
+        <p class="task-detail"><strong>Дата добавления:</strong> {{task.data}}</p>
+    </div>
+    
+    <div class="action-card">
+        <h3 class="action-title">Изменить задачу</h3>
+        <form action="/save_new_task" method="post">
+            <input type="hidden" name="page" value="{{page}}">
+            <input type="hidden" name="task_id" value="{{task.id}}">
+            <input type="text" class="form-input" name="new_name_task" placeholder="Новое название" required>
+            <input type="text" class="form-input" name="new_description_task" placeholder="Новое описание" required>
+            <button type="submit" class="form-button" name="_method" value="put">Сохранить изменения</button>
+        </form>
+        
+        <hr class="divider">
+        
+        <form action="/delete_task" method="post">
+            <input type="hidden" name="page" value="{{page}}">
+            <input type="hidden" name="task_id" value="{{task.id}}">
+            <button type="submit" class="form-button" name="_method" value="delete">Удалить задачу</button>
+        </form>
+    </div>
+    
+    <div class="action-card">
+        <form action="/completing_the_task" method="post">
+            <input type="hidden" name="task_id" value="{{ task.id }}">
+            <input type="hidden" name="prev_page" value="{{ page }}">
+            <input type="hidden" name="source" value="task">
+            <button type="submit" class="complete-button">
+                ✅ Отметить выполненной
+            </button>
+        </form>
+    </div>
+</body>
+</html>

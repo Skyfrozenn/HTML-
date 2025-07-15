@@ -1,0 +1,48 @@
+# Python
+*.pyc
+__pycache__/
+*.sqlite
+*.db
+instance/
+env/
+venv/
+.venv/
+ENV
+.env
+*.log
+*.egg
+*.egg-info
+dist
+build
+eggs
+wheels
+PKG-INFO
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+# Environments
+.Python
+_build
+coverage
+*.profdata
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV
+dist/
+*.egg-info/
+*.egg
+build/
+develop-eggs/
+MANIFEST
+
+# OS generated files #
+######################
+.DS_Store
+Thumbs.db
+
