@@ -184,8 +184,7 @@ def save_new_task():
         return "Неверный метод!",405
 
 
-from sqlalchemy import func
-from math import ceil
+ 
 
 @app.post("/delete_task")
 @check_login
@@ -221,22 +220,16 @@ def delete_task():
 @check_login
 def complete_task():
     task_id = request.form.get("task_id")
-    prev_page = request.form.get("prev_page")  # Может быть None
-    source = request.form.get("source")  
-
+    current_page = request.form.get("current_page", 1, type=int)
+    
     with Session.begin() as db_session:
+        # Помечаем задачу выполненной
         task = db_session.scalar(select(Tasks).where(Tasks.id == task_id))
-        if task:
-            task.status = "Выполнено"
-            now = datetime.now()
-            task.completed_at = now.strftime("%Y-%m-%d - %H:%M:%S")
-
-    # Редирект в зависимости от источника
-    if source == "task":
-      return redirect(url_for('watch_completed_task', 
-                             page=1, 
-                             prev_page=prev_page ,source = source))  
-             
+        task.status = "Выполнено"
+        task.completed_at = datetime.now()
+    
+    # Всегда перенаправляем на первую страницу выполненных задач
+    return redirect(url_for('watch_completed_task', page=1, prev_page=current_page, source='task'))
 
 
 
